@@ -57,7 +57,6 @@ class UserController extends Controller
 
     public function update(UserRequest $request, User $user): JsonResponse
     {
-
         DB::beginTransaction();
 
         try {
@@ -86,7 +85,6 @@ class UserController extends Controller
 
     public function destroy(User $user): JsonResponse
     {
-
         try {
             $user->delete();
 

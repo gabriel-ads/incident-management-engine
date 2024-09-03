@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\IncidentController;
 use App\Http\Controllers\Api\LoginController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
@@ -12,5 +13,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/users', [UserController::class, 'store']);
     Route::put('/users/{user}', [UserController::class, 'update']);
     Route::delete('/users/{user}', [UserController::class, 'destroy']);
+
     Route::post('/logout/{user}', [LoginController::class, 'logout']);
+
+    Route::get('/incidents', [IncidentController::class, 'index']);
+    Route::post('/incidents', [IncidentController::class, 'store']);
+    Route::put('/incidents/{incident}', [IncidentController::class, 'update']);
+    Route::delete('/incidents/{incident}', [IncidentController::class, 'destroy']);
 });
