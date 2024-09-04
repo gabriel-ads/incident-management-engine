@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Events\IncidentBroadcast;
 use App\Events\IncidentCreated;
 use App\Models\Incident;
 use Exception;
@@ -31,7 +32,8 @@ class CreateIncidentJob implements ShouldQueue
     public function handle(): void
     {
         try {
-            Incident::create($this->newIncident);
+            $incident = Incident::create($this->newIncident);
+            IncidentBroadcast::dispatch($incident, 'create');
         } catch (Exception $e) {
             throw $e;
         }

@@ -73,7 +73,7 @@ class IncidentController extends Controller
     public function destroy(Incident $incident): JsonResponse
     {
         try {
-            DeleteIncidentJob::dispatch($incident)->onQueue('default');
+            DeleteIncidentJob::dispatch($incident->id)->onQueue('default');
 
             return response()->json([
                 'status' => true,
