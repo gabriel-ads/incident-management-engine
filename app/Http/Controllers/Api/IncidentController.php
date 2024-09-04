@@ -4,12 +4,12 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\IncidentRequest;
-use App\Jobs\JobCreateIncident;
-use App\Jobs\JobUpdateIncident;
+use App\Jobs\CreateIncidentJob;
+use App\Jobs\DeleteIncidentJob;
+use App\Jobs\UpdateIncidentJob;
 use App\Models\Incident;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class IncidentController extends Controller
@@ -28,25 +28,13 @@ class IncidentController extends Controller
     {
         DB::beginTransaction();
         try {
-            // $incident = Incident::create([
-            //     'name' => $request->name,
-            //     'evidence' => $request->evidence,
-            //     'criticality' => $request->criticality,
-            //     'host' => $request->host,
-            //     'user_id' => $request->user_id
-            // ]);
-
-            $incident = Incident::create($request->validated());
-
-            JobCreateIncident::dispatch($incident)->onQueue('default');
-
+            CreateIncidentJob::dispatch($request->validated())->onQueue('default');
             DB::commit();
 
             return response()->json([
                 'status' => true,
-                'incident' => $incident,
-                'message' => 'Incidente cadastrado com sucesso!'
-            ], 201);
+                'message' => 'Incidente sendo processado!'
+            ], 202);
         } catch (Exception $e) {
             DB::rollBack();
 
@@ -62,25 +50,15 @@ class IncidentController extends Controller
         DB::beginTransaction();
 
         try {
-            // $incident->update([
-            //     'name' => ($request->name ? $request->name : $currentIncident->name),
-            //     'evidence' => ($request->evidence ? $request->evidence : $currentIncident->evidence),
-            //     'criticality' => ($request->criticality ? $request->criticality : $currentIncident->criticality),
-            //     'host' => ($request->host ? $request->host : $currentIncident->host),
-            //     'user_id' => $currentIncident->user_id
-            // ]);
-
-            JobUpdateIncident::dispatch($incident, $request->validated())->onQueue('default');
+            UpdateIncidentJob::dispatch($incident, $request->validated())->onQueue('default');
 
             DB::commit();
 
             return response()->json([
                 'status' => true,
-                'incident' => $incident->fresh(),
-                'message' => 'Incidente editado com sucesso!'
-            ], 200);
+                'message' => 'Incidente editado está sendo processado!'
+            ], 202);
         } catch (Exception $e) {
-            dd($e);
             DB::rollBack();
 
             return response()->json([
@@ -93,13 +71,12 @@ class IncidentController extends Controller
     public function destroy(Incident $incident): JsonResponse
     {
         try {
-            $incident->delete();
+            DeleteIncidentJob::dispatch($incident)->onQueue('default');
 
             return response()->json([
                 'status' => true,
-                'incident' => $incident,
-                'message' => 'Incidente apagado com sucesso!'
-            ], 200);
+                'message' => 'Incidente apagado está sendo processado!'
+            ], 202);
         } catch (Exception $e) {
             DB::rollBack();
 

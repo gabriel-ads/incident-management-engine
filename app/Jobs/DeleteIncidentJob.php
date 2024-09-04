@@ -2,21 +2,17 @@
 
 namespace App\Jobs;
 
-use App\Models\Incident;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 
-class JobCreateIncident implements ShouldQueue
+class DeleteIncidentJob implements ShouldQueue
 {
     use Queueable;
 
     /**
      * Create a new job instance.
      */
-    public function __construct(private $incidentId)
+    public function __construct(private $incident)
     {
         //
     }
@@ -26,6 +22,6 @@ class JobCreateIncident implements ShouldQueue
      */
     public function handle(): void
     {
-        Incident::find($this->incidentId);
+        $this->incident->delete();
     }
 }
