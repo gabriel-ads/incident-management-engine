@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\IncidentRequest;
+use App\Jobs\JobCreateIncident;
+use App\Jobs\JobUpdateIncident;
 use App\Models\Incident;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -26,13 +28,17 @@ class IncidentController extends Controller
     {
         DB::beginTransaction();
         try {
-            $incident = Incident::create([
-                'name' => $request->name,
-                'evidence' => $request->evidence,
-                'criticality' => $request->criticality,
-                'host' => $request->host,
-                'user_id' => $request->user_id
-            ]);
+            // $incident = Incident::create([
+            //     'name' => $request->name,
+            //     'evidence' => $request->evidence,
+            //     'criticality' => $request->criticality,
+            //     'host' => $request->host,
+            //     'user_id' => $request->user_id
+            // ]);
+
+            $incident = Incident::create($request->validated());
+
+            JobCreateIncident::dispatch($incident)->onQueue('default');
 
             DB::commit();
 
@@ -53,23 +59,24 @@ class IncidentController extends Controller
 
     public function update(IncidentRequest $request, Incident $incident): JsonResponse
     {
-        $currentIncident = Incident::find($incident->id);
         DB::beginTransaction();
 
         try {
-            $incident->update([
-                'name' => ($request->name ? $request->name : $currentIncident->name),
-                'evidence' => ($request->evidence ? $request->evidence : $currentIncident->evidence),
-                'criticality' => ($request->criticality ? $request->criticality : $currentIncident->criticality),
-                'host' => ($request->host ? $request->host : $currentIncident->host),
-                'user_id' => $currentIncident->user_id
-            ]);
+            // $incident->update([
+            //     'name' => ($request->name ? $request->name : $currentIncident->name),
+            //     'evidence' => ($request->evidence ? $request->evidence : $currentIncident->evidence),
+            //     'criticality' => ($request->criticality ? $request->criticality : $currentIncident->criticality),
+            //     'host' => ($request->host ? $request->host : $currentIncident->host),
+            //     'user_id' => $currentIncident->user_id
+            // ]);
+
+            JobUpdateIncident::dispatch($incident, $request->validated())->onQueue('default');
 
             DB::commit();
 
             return response()->json([
                 'status' => true,
-                'incident' => $incident,
+                'incident' => $incident->fresh(),
                 'message' => 'Incidente editado com sucesso!'
             ], 200);
         } catch (Exception $e) {

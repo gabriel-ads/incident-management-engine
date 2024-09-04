@@ -34,9 +34,9 @@ class UserRequest extends FormRequest
         $userId = $this->route('user');
 
         return [
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email,' . ($userId ? $userId->id : null),
-            'password' => 'required|min:6'
+            'name' => ($this->isMethod('post') ? 'required' : ''),
+            'email' => ($this->isMethod('post') ? 'required|email|unique:users,email,' . ($userId ? $userId->id : null) : 'email|unique:users,email,' . ($userId ? $userId->id : null)),
+            'password' => ($this->isMethod('post') ? 'required|min:6' : 'min:6')
         ];
     }
 

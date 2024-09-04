@@ -57,13 +57,14 @@ class UserController extends Controller
 
     public function update(UserRequest $request, User $user): JsonResponse
     {
+        $currentUser = User::find($user->id);
         DB::beginTransaction();
 
         try {
             $user->update([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => $request->password,
+                'name' => ($request->name ? $request->name : $currentUser->name),
+                'email' => ($request->email ? $request->email : $currentUser->email),
+                'password' => ($request->password ? $request->password : $currentUser->password),
             ]);
 
             DB::commit();
