@@ -21,6 +21,6 @@ return Application::configure(basePath: dirname(__DIR__))
             return response()->json([
                 'status' => false,
                 'message' => 'Token de autenticação inválido'
-            ]);
+            ], 401);
         });
     })->create();

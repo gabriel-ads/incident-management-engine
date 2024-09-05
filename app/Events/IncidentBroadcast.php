@@ -18,16 +18,14 @@ class IncidentBroadcast implements ShouldBroadcast
 
     public $incident;
     private $eventType;
-    private $userId;
 
     /**
      * Create a new event instance.
      */
-    public function __construct($incident, $eventType, $userId = null)
+    public function __construct($incident, $eventType)
     {
         $this->incident = $incident;
         $this->eventType = $eventType;
-        $this->userId = $userId;
     }
 
     /**
@@ -48,11 +46,6 @@ class IncidentBroadcast implements ShouldBroadcast
      */
     public function broadcastWith(): array
     {
-        // return match ($this->eventType) {
-        //     'create' => ['incident' => $this->incident, 'eventType' => $this->eventType],
-        //     'update' => ['incident' => $this->incident, 'eventType' => $this->eventType],
-        //     'delete' => ['incidentId' => $this->incident, 'eventType' => $this->eventType]
-        // };
         return ['incident' => $this->incident, 'eventType' => $this->eventType];
     }
 }
