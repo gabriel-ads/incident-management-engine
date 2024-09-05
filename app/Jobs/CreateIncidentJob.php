@@ -3,14 +3,10 @@
 namespace App\Jobs;
 
 use App\Events\IncidentBroadcast;
-use App\Events\IncidentCreated;
 use App\Models\Incident;
 use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 
 class CreateIncidentJob implements ShouldQueue
 {
