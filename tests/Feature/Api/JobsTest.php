@@ -38,7 +38,7 @@ class JobsTest extends TestCase
         $this->login();
         Queue::fake();
 
-        Incident::factory(3)->create();
+        Incident::factory(1)->create();
 
         $incident = Incident::first();
 
@@ -54,7 +54,7 @@ class JobsTest extends TestCase
         $this->login();
         Queue::fake();
 
-        Incident::factory(3)->create();
+        Incident::factory(1)->create();
 
         $incident = Incident::first();
 
@@ -70,7 +70,7 @@ class JobsTest extends TestCase
         $this->login();
         Queue::fake();
 
-        Incident::factory(3)->create();
+        Incident::factory(1)->create();
 
         $incident = Incident::first();
 

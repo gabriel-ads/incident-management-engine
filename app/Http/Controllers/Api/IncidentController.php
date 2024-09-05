@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Events\IncidentBroadcast;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\IncidentRequest;
 use App\Jobs\CreateIncidentJob;
@@ -52,7 +51,6 @@ class IncidentController extends Controller
 
         try {
             UpdateIncidentJob::dispatch($incident, $request->validated())->onQueue('default');
-            IncidentBroadcast::dispatch($incident, 'update');
 
             DB::commit();
 

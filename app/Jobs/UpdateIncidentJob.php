@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Events\IncidentBroadcast;
 use App\Models\Incident;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -31,5 +32,6 @@ class UpdateIncidentJob implements ShouldQueue
     public function handle(): void
     {
         $this->incident->update($this->updateData);
+        IncidentBroadcast::dispatch($this->incident, 'update');
     }
 }
