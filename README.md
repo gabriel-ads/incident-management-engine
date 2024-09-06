@@ -13,13 +13,13 @@ Incident Management é um backend com o foco principal em uma API RESTful para g
 - Swagger
 - Testes
 
-# Requisitos para rodar o projeto (Clique para baixar)
+## Requisitos para rodar o projeto (Clique para baixar)
 - [PHP](https://www.php.net/downloads.php)
 - [Composer](https://getcomposer.org/)
 - [Docker](https://www.docker.com/products/docker-desktop/)
 - [WSL](https://learn.microsoft.com/pt-br/windows/wsl/install)
 
-# Como baixar e rodar o projeto
+## Como baixar e rodar o projeto
 Após clonar o projeto, dentro de sua pasta, rode o comando:
 ```sh
 composer install
@@ -36,7 +36,11 @@ Com o docker rodando em sua maquina, execute o comando:
 ```sh
 /vendor/bin/sail up
 ```
-.Após configurar sua env e subir o projeto, rode as migrações para criar as tabelas no seu banco de dados:
+Nesse projeto nós estamos utilizando Job/queue para enfileirar o crud de incidentes e também temos o broadcast então rode:
+```sh
+./vendor/bin/sail artisan queue:work
+```
+Após configurar sua env, subir o projeto e colocar as filas para trabalhar, rode as migrações para criar as tabelas no seu banco de dados:
 ```sh
 ./vendor/bin/sail artisan migrate
 ```
@@ -49,6 +53,8 @@ Por fim, gere a chave JWT para conseguir usar o mesmo;
 ./vendor/bin/sail artisan jwt:secret
 ```
 
+## Host e swagger
+
 A API tem a seu host em:
 - 127.0.0.1
 
@@ -59,3 +65,17 @@ Caso não consiga acessar a documentação tente gerar ela novamente:
 ```sh
 ./vendor/bin/sail artisan l5-swagger:generate
 ```
+## Rodando os testes
+Para ver os testes execute o seguinte comando:
+```sh
+./vendor/bin/sail artisan test
+```
+
+## Referências
+
+- [Laravel - Doc](https://laravel.com/docs/11.x)
+- [Laravel Sail](https://laravel.com/docs/11.x/sail#main-content)
+- [Queues](https://laravel.com/docs/11.x/queues#main-content)
+- [Broadcasting](https://laravel.com/docs/11.x/broadcasting#main-content)
+- [JWT](https://jwt-auth.readthedocs.io/en/develop/laravel-installation/)
+- [Swagger](https://github.com/DarkaOnLine/L5-Swagger/wiki/Installation-&-Configuration)
