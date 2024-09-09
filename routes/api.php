@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\IncidentController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\BroadcastController;
 use Illuminate\Support\Facades\Route;
 
 Route::group([
@@ -27,4 +28,5 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/incidents', [IncidentController::class, 'store']);
     Route::put('/incidents/{incident}', [IncidentController::class, 'update']);
     Route::delete('/incidents/{incident}', [IncidentController::class, 'destroy']);
+    Route::post('/broadcasting/auth/{channel}', [BroadcastController::class, 'authorizeChannel']);
 });

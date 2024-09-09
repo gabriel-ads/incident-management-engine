@@ -77,7 +77,7 @@ class IncidentController extends Controller
      */
     public function index(): JsonResponse
     {
-        $incidents = Incident::orderBy('id', 'DESC')->paginate(5);
+        $incidents = Incident::orderBy('id', 'DESC')->paginate(10);
 
         return response()->json([
             'status' => true,
